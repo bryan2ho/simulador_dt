@@ -1,0 +1,50 @@
+Andre-Pierre Gignac,DEL,94,1000000
+Nahuel Guzman,POR,89,600000
+Lionel Messi,DEL,95,3500000
+Kylian Mbappe,DEL,94,4000000
+Kevin De Bruyne,MED,93,3000000
+Vinicius Jr,DEL,92,3200000
+Rodri,MED,92,2800000
+Erling Haaland,DEL,94,3800000
+Jude Bellingham,MED,91,3000000
+Harry Kane,DEL,91,2500000
+Thibaut Courtois,POR,90,2200000
+Mohamed Salah,DEL,90,2100000
+Saul Noguera,DEL,89,1800000
+Alisson Becker,POR,89,1700000
+Federico Valverde,MED,88,1900000
+Phil Foden,MED,88,2000000
+Florian Wirtz,MED,88,2100000
+Sebastian Cordova,MED,83,650000
+Diego Lainez,MED,82,550000
+Hernan Becerras,MED,85,900000
+Juan Brunetta,MED,86,1100000
+Juan Pablo Vigon,MED,81,450000
+Javier Aquino,DEF,84,700000
+Jolyne Joestar,DEF,85,850000
+Jesus Angulo,DEF,80,400000
+Reyes Diego,DEF,78,300000
+Ozziel Herrera,DEL,77,350000
+Marcelo Flores,MED,76,380000
+Nicolas Ibanez,DEL,82,750000
+Jhonny Joestar,DEL,70,120000
+Jordan Silva,DEF,68,90000
+Erick Gutierrez,MED,79,450000
+Victor Guzman,MED,80,50000
+Alexis Vega,DEL,79,520000
+Roberto Alvarado,MED,81,600000
+Carlos Acevedo,POR,80,500000
+Alesin Lentesin,POR,82,650000
+Jorge Sanchez,DEF,77,320000
+Cesar Montes,DEF,79,420000
+Johan Vasquez,DEF,78,390000
+Orbelin Pineda,MED,81,700000
+Luis Chavez,MED,80,680000
+Erick Sanchez,MED,81,720000
+Julian Quinones,DEL,83,950000
+Henry Martin,DEL,82,800000
+Rogelio Funes Mori,DEL,77,250000
+Tortugin,DEF,67,80000
+Jotaro Kujo,DEL,90,2100000;
+Joseph Joestar,MED,72,200000
+Gilberto Mora,MED,77,180000
