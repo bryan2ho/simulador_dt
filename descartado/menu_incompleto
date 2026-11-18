@@ -72,7 +72,18 @@ void partida(Club *mi_club, int opcion_principal) {
         }
     } while(mi_club.dia_actual <= 7 && opcion_principal != 6);
 }
+void mostrar_creditos(){
+        limpiar_pantalla();
+        printf("=========================================\n");
+        printf("                Créditos                 \n"):
+        printf("=========================================\n");
+        printf("Equipo \n");
+        printf("Alejandro Guardiola Rodríguez________");
+        printf("Bryan Armando Cano Guzmán____________");
+        printf("Ian Emmanuel Valle Reza______________");
+        printf("Miranda Mariel Vidales Gutiérrez_____")
 
+}
 int main(){
 
     Club mi_club;
@@ -88,6 +99,9 @@ switch(opcion_inicial) {
         scanf("%s", mi_club.nombre_equipo);
         printf("=========================================\n");
 
+        mi_club.dia_actual = 1;
+        mi_club.presupuesto = 10000000;
+        mi_club.total_jugadores = 11;
         mi_club.plantilla = (Jugador *) malloc(mi_club.total_jugadores * sizeof(Jugador));
         if(mi_club.plantilla == NULL){
                 printf("Error al asignar memoria \n");
@@ -104,6 +118,7 @@ switch(opcion_inicial) {
         break;
     case 4:
         printf("Saliendo del juego...\n");
+        free(mi_club.plantilla);
         exit(0);
     default:
         printf("Opcion invalida. Por favor, elige una opcion valida.\n");
