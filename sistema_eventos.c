@@ -11,6 +11,7 @@
 #endif
 #include "sistema_eventos.h"
 #include "estructuras.h"
+#include "misc.h"
 
 typedef struct {
     TipoEvento id;
@@ -70,14 +71,6 @@ static int calcular_promedio(Club *club) {
     }
     
     return suma / 11;
-}
-
-static void borrar_lineas(int n) {
-    for (int i = 0; i < n; i++) {
-        printf("\033[1A\033[2K");
-    }
-    printf("\r");
-    fflush(stdout);
 }
 
 static void imprimir_repetido(const char* texto, int veces) {
