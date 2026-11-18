@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "estructuras.h"
+#include "sistema_guardado.h"
+
+static void limpiar_pantalla(){
+#ifdef _WIN32
+    system("cls");   // para limpiar pantalla en windows
+#else
+    system("clear"); // para limpiar pantalla en linux porque alejandro es linuxero
+#endif
+}
+
+void mostrar_menu_inicial(){
+    limpiar_pantalla();
+    printf("\n");
+    printf("========================================\n");
+    printf("           SIMULADOR DE DT              \n");
+    printf("========================================\n");
+    printf(" [1] Iniciar Nueva Partida\n");
+    printf(" [2] Cargar Partida Guardada\n");
+    printf(" [3] Creditos\n");
+    printf(" [4] Salir\n");
+    printf("----------------------------------------\n");
+    printf("Elige una opcion: ");
+
+}
+
+
+void mostrar_menu_principal(const char* nombre_club, int dia_actual, int presupuesto){
+    limpiar_pantalla();
+    printf("\n");
+    printf("========================================\n");
+    printf("  %s\n", nombre_club);
+    printf("  SEMANA %d / 7  |  Presupuesto: $%d\n", dia_actual, presupuesto);
+    printf("========================================\n");
+    printf(" [1] Ver plantilla de jugadores\n");
+    printf(" [2] Mercado de fichajes (Comprar/Vender)\n"); // <--- Aquí
+    printf(" [3] Avanzar al siguiente dia\n");
+    printf(" [4] Guardar partida\n");
+    printf(" [6] Salir al menu principal\n");
+    printf("----------------------------------------\n");
+    printf("Elige una opcion: ");
+}
+
+void partida(Club *mi_club, int opcion_principal) {
+
+    do{
+        mostrar_menu_principal(mi_club->nombre_equipo, mi_club->dia_actual, mi_club->presupuesto);
+        scanf("%d", &opcion_principal);
+
+        switch(opcion_principal) {
+            case 1:
+                mostrar_plantilla();
+                break;
+            case 2:
+                mercado();
+                break;
+            case 3:
+                mi_club->dia_actual++;
+                break;
+            case 4:
+                guardar_partida();
+                break;
+            case 6:
+                printf("Regresando al menu principal...\n");
+                break;
+            default:
+                printf("Opcion invalida. Por favor, elige una opcion valida.\n");
+                break;
+        }
+    } while(mi_club.dia_actual <= 7 && opcion_principal != 6);
+}
+
+int main(){
+
+    Club mi_club;
+    int opcion_inicial, opcion_principal;
+
+mostrar_menu_inicial();
+scanf("%d", &opcion_inicial);
+
+switch(opcion_inicial) {
+    case 1:
+        printf("=========================================\n");
+        printf("Ingresa el nombre de tu club: ");
+        scanf("%s", mi_club.nombre_equipo);
+        printf("=========================================\n");
+
+        partida(&mi_club);
+        break;
+    case 2:
+        cargar_partida();
+        partida(&mi_club);
+        break;
+    case 3:
+        mostrar_creditos();
+
+        break;
+    case 4:
+        printf("Saliendo del juego...\n");
+        exit(0);
+    default:
+        printf("Opcion invalida. Por favor, elige una opcion valida.\n");
+        break;
+}
+
+
+return 0;
+}
