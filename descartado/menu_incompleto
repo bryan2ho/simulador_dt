@@ -88,6 +88,10 @@ switch(opcion_inicial) {
         scanf("%s", mi_club.nombre_equipo);
         printf("=========================================\n");
 
+        mi_club.plantilla = (Jugador *) malloc(mi_club.total_jugadores * sizeof(Jugador));
+        if(mi_club.plantilla == NULL){
+                printf("Error al asignar memoria \n");
+                exit(1);
         partida(&mi_club);
         break;
     case 2:
