@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "estructuras.h"
+
+static void limpiar_pantalla(){
+#ifdef _WIN32
+    system("cls");   // para limpiar pantalla en windows
+#else
+    system("clear"); // para limpiar pantalla en linux porque alejandro es linuxero
+#endif
+}
+
+void mostrar_menu_inicial(){
+    limpiar_pantalla();
+    printf("\n");
+    printf("========================================\n");
+    printf("           SIMULADOR DE DT              \n");
+    printf("========================================\n");
+    printf(" [1] Iniciar Nueva Partida\n");
+    printf(" [2] Cargar Partida Guardada\n");
+    printf(" [3] Creditos\n");
+    printf(" [4] Salir\n");
+    printf("----------------------------------------\n");
+    printf("Elige una opcion: ");
+}
+
+void mostrar_menu_principal(const char* nombre_club, int dia_actual, int presupuesto){
+    limpiar_pantalla();
+    printf("\n");
+    printf("========================================\n");
+    printf("  %s\n", nombre_club);
+    printf("  SEMANA %d / 7  |  Presupuesto: $%d\n", dia_actual, presupuesto);
+    printf("========================================\n");
+    printf(" [1] Ver plantilla de jugadores\n");
+    printf(" [2] Mercado de fichajes (Comprar/Vender)\n"); // <--- Aquí
+    printf(" [3] Avanzar al siguiente dia\n");
+    printf(" [4] Guardar partida\n");
+    printf(" [6] Salir al menu principal\n");
+    printf("----------------------------------------\n");
+    printf("Elige una opcion: ");
+}

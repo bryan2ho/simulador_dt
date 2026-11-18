@@ -1,0 +1,8 @@
+#ifndef INTERFAZ_H
+#define INTERFAZ_H
+#include "estructuras.h"
+
+void mostrar_menu_inicial();
+void mostrar_menu_principal(char *nombre_club, int semana_actual, int presupuesto);
+
+#endif
