@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <string.h>
 #include "estructuras.h"
 #include "sistema_guardado.h"
@@ -16,6 +17,7 @@ al final todas deben estar incluidas aqui, pueden ver los archivos de sistema_gu
 
 
 int main(){
+    srand(time(NULL)); // Conf para numeros aleatorios ((sólo se llama aquí)).
 
     return 0;
 }
