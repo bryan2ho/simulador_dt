@@ -1,0 +1,42 @@
+Club mi_club;
+
+strcpy(mi_club.nombre_equipo, "Tigres UANL");
+mi_club.presupuesto = 5000000;
+mi_club.dia_actual = 3;
+mi_club.total_jugadores = 2;
+
+mi_club.plantilla = (Jugador *) malloc(mi_club.total_jugadores * sizeof(Jugador));
+
+strcpy(mi_club.plantilla[0].nombre, "Andre-Pierre Gignac");
+strcpy(mi_club.plantilla[0].posicion, "DEL");
+mi_club.plantilla[0].media = 94;
+mi_club.plantilla[0].valor = 100000;
+
+strcpy(mi_club.plantilla[1].nombre, "Nahuel Guzman");
+strcpy(mi_club.plantilla[1].posicion, "POR");
+mi_club.plantilla[0].media = 89;
+mi_club.plantilla[0].valor = 200000;
+
+printf("///ANTES DE GUARDAR///\n");
+printf("Equipo: %s | Presupuesto: %d | Dia: %d | Jugadores: %d\n", mi_club.nombre_equipo, mi_club.presupuesto, mi_club.dia_actual, mi_club.total_jugadores);
+printf("Jugador 1: %s | Media: %d\n", mi_club.plantilla[0].nombre, mi_club.plantilla[0].media);
+printf("Jugador 2: %s | Media: %d\n\n", mi_club.plantilla[1].nombre, mi_club.plantilla[1].media);
+
+guardar_partida(&mi_club);
+
+strcpy(mi_club.nombre_equipo, "Basura");
+mi_club.presupuesto = 0;
+mi_club.dia_actual = 99;
+mi_club.total_jugadores = 0;
+
+printf("///DESPUES DE MODIFICAR (antes de cargar)///\n");
+printf("Equipo: %s | Presupuesto: %d | Dia: %d | Jugadores: %d\n\n", 
+mi_club.nombre_equipo, mi_club.presupuesto, mi_club.dia_actual, mi_club.total_jugadores);
+
+cargar_partida(&mi_club);
+
+
+printf("///DESPUES DE CARGAR///\n");
+printf("Equipo: %s | Presupuesto: %d | Dia: %d | Jugadores: %d\n", mi_club.nombre_equipo, mi_club.presupuesto, mi_club.dia_actual, mi_club.total_jugadores);
+printf("Jugador 1: %s | Media: %d\n", mi_club.plantilla[0].nombre, mi_club.plantilla[0].media);
+printf("Jugador 2: %s | Media: %d\n\n", mi_club.plantilla[1].nombre, mi_club.plantilla[1].media);
