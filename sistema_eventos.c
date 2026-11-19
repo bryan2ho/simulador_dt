@@ -71,12 +71,6 @@ static int calcular_promedio(Club *club) {
     return suma / 11;
 }
 
-static void imprimir_repetido(const char* texto, int veces) {
-    for (int i = 0; i < veces; i++) {
-        printf("%s", texto);
-    }
-}
-
 void eventos_ejecutar(Club *club) {
     if (club == NULL) return;
 
@@ -112,8 +106,9 @@ void eventos_ejecutar(Club *club) {
 
 void eventos_final(Club *club) {
     int media = calcular_promedio(club);
-    int min_diff = 10, max_diff = 20;
-    int media_rival = media + (min_diff + rand() % (max_diff - min_diff + 1));
+    int min_diff = -3, max_diff = 3;
+    int diff = min_diff + rand() % (max_diff - min_diff + 1);
+    int media_rival = media + diff;
     // TODO: más printf aquí
     if (media_rival < media) {
         printf("Eres campeón!!!\n");
@@ -132,22 +127,79 @@ void eventos_final(Club *club) {
 
         int goles_propios = 0;
         int goles_rival = 0;
+        char tiros_propios[5] = {'X', 'X','X', 'X', 'X'};
+        char tiros_rival[5] = {'X', 'X','X', 'X', 'X'};
+        bool terminado = false;
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5 && !terminado; i++) {
             int r_propio = rand() % 2;
-            int r_rival = rand() % 2;
-            // Cobro propio
             goles_propios += r_propio;
-            goles_rival += r_rival;
+            tiros_propios[i] = r_propio ? 'A' : 'F';
+            
+            int r_rival = 0;
+            int restantes_propios = 4 - i;
+            int restantes_rival_antes = 5 - i;
+            
+            if (goles_propios - goles_rival > restantes_rival_antes) {
+                terminado = true;
+            } else {
+                r_rival = rand() % 2;
+                goles_rival += r_rival;
+                tiros_rival[i] = r_rival ? 'A' : 'F';
+
+                int restantes_rival = 4 - i;
+
+                if (goles_propios - goles_rival > restantes_rival ||
+                    goles_rival - goles_propios > restantes_propios) {
+                    
+                    terminado = true;
+                }
+            }
+
             borrar_lineas(6);
             printf("%d - %d\n", goles_propios, goles_rival);
-            printf("Tú: \n");
-            imprimir_repetido("A ", goles_propios); imprimir_repetido("F ", (i+1) - goles_propios); printf("\n");
-            printf("Rival: \n");
-            imprimir_repetido("A ", goles_rival); imprimir_repetido("F ", (i+1) - goles_rival); printf("\n");
-            printf("Cobrando siguientes dos penales...\n");
-            ssleep(2000);
-            // TODO: Agregar condicion de victoria y muerte súbita.
+            printf("Tú: \n\t");
+            for (int j = 0; j < 5; j++) printf("%c ", tiros_propios[j]);
+            printf("\nRival: \n\t");
+            for (int j = 0; j < 5; j++) printf("%c ", tiros_rival[j]);
+            printf("\n");
+
+            if (!terminado && i < 4) {
+                printf("Cobrando siguientes dos penales...\n");
+                ssleep(2000);
+            } else if (!terminado && i == 4 && goles_propios == goles_rival) {
+                printf("Empate. Vamos a muerte súbita...\n");
+                ssleep(2000);
+            } else {
+                printf("Tanda de penales terminada.\n");
+                ssleep(1000);
+            }
+        }
+
+        while (goles_propios == goles_rival) {
+            int r_propio = rand() % 2;
+            int r_rival = rand() % 2;
+            goles_propios += r_propio;
+            goles_rival += r_rival;
+
+            borrar_lineas(6);
+            printf("%d - %d (Muerte Súbita)\n", goles_propios, goles_rival);
+            printf("Tú: \n\t %c\n", r_propio ? 'A' : 'F');
+            printf("Rival: \n\t %c\n", r_rival ? 'A' : 'F');
+            
+            if (goles_propios == goles_rival) {
+                printf("Siguen empatados, siguiente ronda...\n");
+                ssleep(2000);
+            } else {
+                printf("Muerte súbita definida.\n");
+                ssleep(1500);
+            }
+        }
+
+        if (goles_propios > goles_rival) {
+            printf("\nGanaste en penales (%d - %d). Eres campeón!!!\n", goles_propios, goles_rival);
+        } else {
+            printf("\nPerdiste en penales (%d - %d)...\n", goles_propios, goles_rival);
         }
 
     }
