@@ -44,6 +44,18 @@ void mostrar_menu_principal(const char* nombre_club, int dia_actual, int presupu
     printf("Elige una opcion: ");
 }
 
+void mostrar_creditos(){
+        limpiar_pantalla();
+        printf("=========================================\n");
+        printf("                Créditos                 \n"):
+        printf("=========================================\n");
+        printf("Equipo \n");
+        printf("Alejandro Guardiola Rodríguez________");
+        printf("Bryan Armando Cano Guzmán____________");
+        printf("Ian Emmanuel Valle Reza______________");
+        printf("Miranda Mariel Vidales Gutiérrez_____")
+
+}
 void partida(Club *mi_club, int opcion_principal) {
 
     do{
@@ -72,18 +84,38 @@ void partida(Club *mi_club, int opcion_principal) {
         }
     } while(mi_club.dia_actual <= 7 && opcion_principal != 6);
 }
-void mostrar_creditos(){
-        limpiar_pantalla();
-        printf("=========================================\n");
-        printf("                Créditos                 \n"):
-        printf("=========================================\n");
-        printf("Equipo \n");
-        printf("Alejandro Guardiola Rodríguez________");
-        printf("Bryan Armando Cano Guzmán____________");
-        printf("Ian Emmanuel Valle Reza______________");
-        printf("Miranda Mariel Vidales Gutiérrez_____")
 
+void inicializar_club(Club *mi_club) {
+    mi_club->dia_actual = 1;
+    mi_club->presupuesto = 10000000;
+    mi_club->total_jugadores = 11;
+    mi_club->plantilla = (Jugador *) malloc(mi_club->total_jugadores * sizeof(Jugador));
+    if(mi_club->plantilla == NULL){
+        printf("Error al asignar memoria \n");
+        return;
+    }
+
+    Jugador jugadores_iniciales[11] = {
+        {"Amadeo Gonzalez", "DEL", 74, 220000},
+        {"Donatello Versus", "DEF", 86, 340000},
+        {"Ceasar Zeppeli", "MED", 80, 160000},
+        {"Bryan", "DEL", 84, 280000},
+        {"Saul Goodman", "DEF", 86, 340000},
+        {"Adrien Agreste", "MED", 78, 180000},
+        {"Dewey Wilkerson", "MED", 82, 200000},
+        {"Finnick Odair", "MED", 84, 130000},
+        {"Dio Brando", "DEF", 90, 400000},
+        {"Oliver Atom", "DEF", 88, 320000},
+        {"Guillermo Ochoa", "POR", 84, 370000}
+
+    }
+
+    for(int i = 0; i < mi_club->total_jugadores; i++) {
+        mi_club->plantilla[i] = jugadores_iniciales[i];
+    }
+    
 }
+
 int main(){
 
     Club mi_club;
@@ -99,13 +131,8 @@ switch(opcion_inicial) {
         scanf("%s", mi_club.nombre_equipo);
         printf("=========================================\n");
 
-        mi_club.dia_actual = 1;
-        mi_club.presupuesto = 10000000;
-        mi_club.total_jugadores = 11;
-        mi_club.plantilla = (Jugador *) malloc(mi_club.total_jugadores * sizeof(Jugador));
-        if(mi_club.plantilla == NULL){
-                printf("Error al asignar memoria \n");
-                exit(1);
+        inicializar_club(&mi_club);
+
         partida(&mi_club);
         break;
     case 2:
