@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #ifdef _WIN32
-    #include <windows.h> // TODO: PROBAR SI FUNCIONA EN WINDOWS
+    #include <windows.h>
     #define ssleep(ms) Sleep(ms)
 #elif __linux__
     #include <unistd.h> 
@@ -20,12 +20,15 @@ typedef struct {
 } Evento;
 
 static Evento eventos[TOTAL_EVENTOS] = {
-    {EVENTO_NADA, "Nada interesante ocurrió.\n", 30, true},
-    {EVENTO_PATROCINADOR, "Tienes un nuevo patrocinador.\n", 10, true},
+    {EVENTO_NADA, "Nada interesante ocurrió.\n", 15, true},
+    {EVENTO_PATROCINADOR, "Tienes un nuevo patrocinador.\n", 11, true},
     {EVENTO_LESION, "Un jugador se lesionó, su media bajó.\n", 15, true},
-    {EVENTO_MUERTE, "A un jugador le dio un infarto durante el entrenamiento. Murió.\n", 5, false}
-    // AGREGAR EVENTOS
-
+    {EVENTO_MUERTE, "A un jugador le dio un infarto durante el entrenamiento. Murió.\n", 3, false},
+    {EVENTO_MOTIVACION, "Uno de tus jugadores se siente motivado.\n", 16, true},
+    {EVENTO_MULTA, "Hubo una riña entre aficionados. Tu club fue multado.\n", 11, true},
+    {EVENTO_EXPORTACION, "Un canterano del club fue comprado por un equipo extranjero.\n", 7, true},
+    {EVENTO_VENTA_CAMISAS, "La venta de camisas del club está yendo muy bien.\n", 14, true},
+    {EVENTO_BUENA_PRETEMPORADA, "Los entrenamientos fueron un éxito. +2 de media a toda la plantilla\n", 8, true}
 };
 
 static const Evento* eventos_seleccionar() {
@@ -71,11 +74,15 @@ static int calcular_promedio(Club *club) {
     return suma / 11;
 }
 
+
+// ======================
+//  Llamar al inicio de cada día.
+// ======================
 void eventos_ejecutar(Club *club) {
     if (club == NULL) return;
 
     eventos_cambiar_estado(EVENTO_MUERTE, club->total_jugadores > 11);
-    
+
     const Evento* elegido = eventos_seleccionar();
     printf("%s", elegido->desc);
 
@@ -92,29 +99,71 @@ void eventos_ejecutar(Club *club) {
             if (club->plantilla[r].media <= 0) {
                 club->plantilla[r].media = 1;
             }
-            printf("Media de %s: %d -> %d.\n\n", club->plantilla[r].nombre, club->plantilla[r].media + 5, club->plantilla[r].media);
+            printf("Media de %s: %d -> %d.\n", club->plantilla[r].nombre, club->plantilla[r].media + 5, club->plantilla[r].media);
             break;
         case EVENTO_MUERTE:
             r = rand() % club->total_jugadores;
-            printf("%s se ha quitado de la plantilla.\n\n",  club->plantilla[r].nombre);
+            printf("%s se ha quitado de la plantilla.\n",  club->plantilla[r].nombre);
             eliminar_jugador(club, r);
+            break;
+        case EVENTO_MOTIVACION:
+            r = rand() % club->total_jugadores;
+            club->plantilla[r].media += 5;
+            if (club->plantilla[r].media >= 100) {
+                club->plantilla[r].media = 100;
+            }
+            printf("Media de %s: %d -> %d.\n", club->plantilla[r].nombre, club->plantilla[r].media - 5, club->plantilla[r].media);
+            break;
+        case EVENTO_MULTA:
+            r = rand() % (club->presupuesto/2 - club->presupuesto/6 + 1) + club->presupuesto/6;
+            club->presupuesto -= r;
+            printf("Nuevo presupuesto: %d -> %d.\n", club->presupuesto + r, club->presupuesto);
+            break;
+        case EVENTO_EXPORTACION:
+            r = rand() % (club->presupuesto - club->presupuesto/4 + 1) + club->presupuesto/6;
+            club->presupuesto += r;
+            printf("Nuevo presupuesto: %d -> %d.\n", club->presupuesto - r, club->presupuesto);
+            break;
+        case EVENTO_VENTA_CAMISAS:
+            r = rand() % (club->presupuesto/2 - club->presupuesto/6 + 1) + club->presupuesto/6;
+            club->presupuesto += r;
+            printf("Nuevo presupuesto: %d -> %d.\n", club->presupuesto - r, club->presupuesto);
+            break;
+        case EVENTO_BUENA_PRETEMPORADA:
+            for (int i = 0; i < club->total_jugadores; i++) {
+                if (club->plantilla[i].media < 99) {
+                    club->plantilla[i].media += 2;
+                }
+            }
             break;
         default:
             break;
     }
 }
 
+// ======================
+//  Llamar al día 7.
+// ======================
 void eventos_final(Club *club) {
     int media = calcular_promedio(club);
-    int min_diff = -3, max_diff = 3;
+    int min_diff = -3, max_diff = -3;
     int diff = min_diff + rand() % (max_diff - min_diff + 1);
     int media_rival = media + diff;
-    // TODO: más printf aquí
+    
+    printf("========GRAN FINAL========\n");
+    printf("%s vs Sixsevenitos\n", club->nombre_equipo);
+    for (int i = 0; i < 12; i++) {
+        printf("\rJugando partido%-3.*s", i % 4, "...");
+        fflush(stdout);
+        ssleep(400);
+    }
+
     if (media_rival < media) {
-        printf("Eres campeón!!!\n");
+        printf("\n\nEres campeón!!!\n");
     } else if (media_rival > media) {
-        printf("Perdiste...\n");
+        printf("\n\nPerdiste...\n");
     } else {
+        printf("\n\nEmpate. Se van a penales...\n");
         printf("Anotado: A\tFallado: F\n");
         printf("Penales\n");
         printf("0 - 0\n");
