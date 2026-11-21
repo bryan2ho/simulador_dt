@@ -6,6 +6,8 @@
 #include "sistema_guardado.h"
 #include "sistema_eventos.h"
 #include "misc.h"
+#include "menu.h"
+#include "sistema_mercado"
 
 /*
 Recuerden incluir la cabecera estructuras.h en las cabeceras que creen y llamar su cabecera .h correspondiente para cada modulo .c que hagan;
@@ -17,7 +19,56 @@ al final todas deben estar incluidas aqui, pueden ver los archivos de sistema_gu
 
 
 int main(){
-    srand(time(NULL)); // Conf para numeros aleatorios ((sólo se llama aquí)).
 
-    return 0;
+    Club mi_club;
+    mi_club.plantilla = NULL;
+    int opcion_inicial;
+    srand(time(NULL)); 
+
+
+do{
+    mostrar_menu_inicial();
+    scanf("%d", &opcion_inicial);
+
+    switch(opcion_inicial) {
+        case 1:
+            if (mi_club.plantilla != NULL) {
+                free(mi_club.plantilla);
+                mi_club.plantilla = NULL;
+                mi_club.total_jugadores = 0;
+            }
+            printf("=========================================\n");
+            printf("Ingresa el nombre de tu club: ");
+            scanf("%s", mi_club.nombre_equipo);
+            printf("=========================================\n");
+
+            inicializar_club(&mi_club);
+
+            partida(&mi_club);
+            limpiar_pantalla();
+            break;
+        case 2:
+            cargar_partida(&mi_club);
+            partida(&mi_club);
+            break;
+        case 3:
+            mostrar_creditos();
+            enter_continuar();
+            break;
+        case 4:
+            printf("Saliendo del juego...\n");
+            break;
+        default:
+            printf("Opcion inválida. Por favor, elige una opción válida.\n");
+            enter_continuar();
+            break;
+    }
+}while(opcion_inicial != 4);
+
+if (mi_club.plantilla != NULL) {
+    free(mi_club.plantilla);
+    mi_club.plantilla = NULL;
+    mi_club.total_jugadores = 0;
+}
+return 0;
 }
