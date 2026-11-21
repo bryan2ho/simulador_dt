@@ -71,13 +71,13 @@ void mostrar_menu_principal(const char* nombre_club, int dia_actual, int presupu
 void mostrar_creditos(){
         limpiar_pantalla();
         printf("=========================================\n");
-        printf("                Créditos                 \n"):
+        printf("                Créditos                 \n");
         printf("=========================================\n");
         printf("Equipo \n");
         printf("Alejandro Guardiola Rodríguez________");
         printf("Bryan Armando Cano Guzmán____________");
         printf("Ian Emmanuel Valle Reza______________");
-        printf("Miranda Mariel Vidales Gutiérrez_____")
+        printf("Miranda Mariel Vidales Gutiérrez_____");
 
 }
 
@@ -105,7 +105,7 @@ void inicializar_club(Club *mi_club) {
         {"Oliver Atom", "DEF", 88, 520000},
         {"Guillermo Ochoa", "POR", 84, 370000}
 
-    }
+    };
 
     for(int i = 0; i < mi_club->total_jugadores; i++) {
         mi_club->plantilla[i] = jugadores_iniciales[i];
@@ -143,7 +143,7 @@ void partida(Club *mi_club, int opcion_principal) {
                 mi_club->dia_actual++;
                 break;
             case 4:
-                guardar_partida();
+                guardar_partida(mi_club);
                 enter_continuar();
                 limpiar_pantalla();
                 break;
@@ -155,7 +155,7 @@ void partida(Club *mi_club, int opcion_principal) {
                 break;
         }
 
-        if(mi_club->dia_actual < 7)
+        if(mi_club->dia_actual < 7){}
     } while(mi_club->dia_actual <= 7 && opcion_principal != 6);
 }
 
@@ -179,12 +179,12 @@ do{
 
             inicializar_club(&mi_club);
 
-            partida(&mi_club);
+            partida(&mi_club, 0);
             limpiar_pantalla();
             break;
         case 2:
-            cargar_partida();
-            partida(&mi_club);
+            cargar_partida(&mi_club);
+            partida(&mi_club, 0);
             break;
         case 3:
             mostrar_creditos();

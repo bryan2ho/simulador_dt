@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "sistema_guardado.h"
 
 //ultima modificacion hecha por bryan lunes 11am
 
-void guardar_partida(Club *mi_club){
+bool guardar_partida(Club *mi_club){
 
     FILE *archivo = fopen("partida.dat", "wb");
 
     if(archivo == NULL){
         printf("Error: No se pudo guardar la partida. \n");
-        return;
+        return false;
     }
 
     fwrite(mi_club->nombre_equipo, sizeof(char), 50, archivo);
@@ -24,15 +25,16 @@ void guardar_partida(Club *mi_club){
     fclose(archivo);
     printf("La partida se guardo con exito como \"partida.dat\". \n\n");
 
+    return true;
 }
 
-void cargar_partida(Club *mi_club){
+bool cargar_partida(Club *mi_club){
 
     FILE *archivo = fopen("partida.dat", "rb");
 
     if(archivo == NULL){
         printf("No se encontro alguna partida guardada previamente \n\n");
-        return;
+        return false;
     }
 
     fread(mi_club->nombre_equipo, sizeof(char), 50, archivo);
@@ -49,4 +51,6 @@ void cargar_partida(Club *mi_club){
     fread(mi_club->plantilla, sizeof(Jugador), mi_club->total_jugadores, archivo);
 
     fclose(archivo);
+
+    return true;
 }
