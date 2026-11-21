@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <stdbool.h>
 #include "estructuras.h"
 #include "sistema_guardado.h"
 #include "sistema_eventos.h"
@@ -48,8 +49,14 @@ do{
             limpiar_pantalla();
             break;
         case 2:
-            cargar_partida(&mi_club);
-            partida(&mi_club);
+
+            if(cargar_partida(&mi_club));
+            {
+                partida(&mi_club);
+            }else{
+                prinft("No se pudo cargar la partida. Asegurate de que exista un archivo guardado.\n");
+                enter_continuar();
+            }
             break;
         case 3:
             mostrar_creditos();
@@ -59,7 +66,7 @@ do{
             printf("Saliendo del juego...\n");
             break;
         default:
-            printf("Opcion inválida. Por favor, elige una opción válida.\n");
+            printf("Opcion invalida. Por favor, elige una opción valida.\n");
             enter_continuar();
             break;
     }
