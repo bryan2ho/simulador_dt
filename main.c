@@ -7,7 +7,7 @@
 #include "sistema_eventos.h"
 #include "misc.h"
 #include "menu.h"
-#include "sistema_mercado"
+#include "sistema_mercado.h"
 
 /*
 Recuerden incluir la cabecera estructuras.h en las cabeceras que creen y llamar su cabecera .h correspondiente para cada modulo .c que hagan;
