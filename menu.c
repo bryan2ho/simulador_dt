@@ -96,17 +96,17 @@ void inicializar_club(Club *mi_club) {
     }
 
     Jugador jugadores_iniciales[11] = {
-        {"Amadeo Gonzalez", "DEL", 76, 220000},
-        {"Donatello Versus", "DEF", 86, 340000},
-        {"Ceasar Zeppeli", "MED", 80, 260000},
-        {"Bryan", "DEL", 84, 280000},
-        {"Saul Goodman", "DEF", 86, 340000},
-        {"Florian Wirtz", "MED", 78, 480000},
-        {"Dewey Wilkerson", "MED", 82, 200000},
-        {"Finnick Odair", "MED", 84, 230000},
-        {"Dio Brando", "DEF", 90, 700000},
-        {"Oliver Atom", "DEF", 88, 520000},
-        {"Guillermo Ochoa", "POR", 84, 370000}
+        {"Amadeo Gonzalez", "DEL", 70, 220000},
+        {"Donatello Versus", "DEF", 69, 340000},
+        {"Ceasar Zeppeli", "MED", 71, 260000},
+        {"Chiruno", "DEL", 72, 280000},
+        {"Saul Goodman", "DEF", 75, 340000},
+        {"Alesin", "MED", 71, 480000},
+        {"Dewey Wilkerson", "MED", 70, 200000},
+        {"Finnick Odair", "MED", 68, 230000},
+        {"Dio Brando", "DEF", 70, 700000},
+        {"Oliver Atom", "DEF", 67, 520000},
+        {"Gagamaru", "POR", 70, 370000}
 
     };
 
