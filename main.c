@@ -48,9 +48,10 @@ do{
             partida(&mi_club);
             limpiar_pantalla();
             break;
+            
         case 2:
 
-            if(cargar_partida(&mi_club));
+            if(cargar_partida(&mi_club))
             {
                 partida(&mi_club);
             }else{
