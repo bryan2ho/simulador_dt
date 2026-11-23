@@ -55,7 +55,7 @@ do{
             {
                 partida(&mi_club);
             }else{
-                prinft("No se pudo cargar la partida. Asegurate de que exista un archivo guardado.\n");
+                printf("No se pudo cargar la partida. Asegurate de que exista un archivo guardado.\n");
                 enter_continuar();
             }
             break;
