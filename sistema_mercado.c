@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "sistema_mercado.h"
+#include "misc.h"
 
 #define MAX_JUGADORES_TXT 100
 

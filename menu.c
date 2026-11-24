@@ -7,6 +7,9 @@
 #include <time.h>
 #include "menu.h"
 
+#define MAX_POOL_MENU 100
+#define TAM_TIENDA_MENU 20
+
 void limpiar_buffer_linea(){
     int c;
     while ((c = getchar()) != '\n' && c != EOF) {}
@@ -144,14 +147,18 @@ void inicializar_club(Club *mi_club) {
     
 }
 
-void mercado(Club *mi_club) {
+void mercado(Club *mi_club, Jugador tienda[], int total_tienda){
+    if (mi_club == NULL || tienda == NULL || total_tienda <= 0) {
+        return;
+    }
+
     int opcion_mercado = 0;
-    char jugador_vender[50];
 
     do {
         limpiar_pantalla();
         printf("========================================\n");
         printf("         MERCADO DE FICHAJES            \n");
+        printf("  Presupuesto: $%d | Plantilla: %d\n", mi_club->presupuesto, mi_club->total_jugadores);
         printf("========================================\n");
         printf("[1] Comprar jugador\n");
         printf("[2] Vender jugador\n");
@@ -167,28 +174,51 @@ void mercado(Club *mi_club) {
         }
 
         switch (opcion_mercado) {
-            case 1:
+            case 1: {
                 limpiar_pantalla();
-                printf(".\n");
-                enter_continuar();
-                break;
-            case 2:
-                limpiar_pantalla();
-                mostrar_plantilla(mi_club);
-                printf("Ingrese el nombre del jugador que desea vender: ");
-                if (scanf(" %49[^\n]", jugador_vender) == 1) {
+                mostrar_tienda(tienda, total_tienda);
+                int num_elegido = 0;
+                printf("\nIngresa el # del jugador a comprar (0 para cancelar): ");
+                if (scanf("%d", &num_elegido) != 1) {
                     limpiar_buffer_linea();
-                    // vender(mi_club, jugador_vender);
+                    printf("Entrada invalida.\n");
                 } else {
                     limpiar_buffer_linea();
+                    if (num_elegido != 0) {
+                        comprar_jugador(mi_club, tienda, total_tienda, num_elegido - 1);
+                    }
                 }
                 enter_continuar();
                 break;
+            }
+
+            case 2: {
+                limpiar_pantalla();
+                if (!puede_vender(mi_club)) {
+                    enter_continuar();
+                    break;
+                }
+                mostrar_plantilla(mi_club);
+                int num_vender = 0;
+                printf("\nIngresa el # del jugador de tu plantilla a vender (0 para cancelar): ");
+                if (scanf("%d", &num_vender) != 1) {
+                    limpiar_buffer_linea();
+                    printf("Entrada invalida.\n");
+                } else {
+                    limpiar_buffer_linea();
+                    if (num_vender != 0) {
+                        vender_jugador(mi_club, num_vender - 1);
+                    }
+                }
+                enter_continuar();
+                break;
+            }
+
             case 3:
                 limpiar_pantalla();
                 printf("Regresando al menu principal...\n");
-                enter_continuar();
                 break;
+
             default:
                 limpiar_pantalla();
                 printf("Opcion invalida. Por favor, elige una opcion valida.\n");
@@ -198,76 +228,98 @@ void mercado(Club *mi_club) {
     } while (opcion_mercado != 3);
 }
 
-void partida(Club *mi_club){
+void partida(Club *mi_club) {
+    if (mi_club == NULL || mi_club->plantilla == NULL){
+        return;
+    }
+
+    Jugador pool[MAX_POOL_MENU];
+    int total_pool = cargar_jugadores(pool);
+    Jugador tienda[TAM_TIENDA_MENU] = {0};
+
+    if (total_pool >= 20){
+        seleccionar_jugadores(pool, total_pool, tienda);
+    }
+
     int opcion_principal = 0;
 
     do {
         mostrar_menu_principal(mi_club->nombre_equipo, mi_club->dia_actual, mi_club->presupuesto);
-        
-        if(scanf("%d", &opcion_principal) != 1){ //scanf retorna la cantidad de elementos que leyo correctamente, si no leyo solo uno entonces es opcion invalida.
-            limpiar_buffer_linea();
-            opcion_principal = 0; 
-        } 
 
-        else{
-            limpiar_buffer_linea(); 
+        if (scanf("%d", &opcion_principal) != 1){
+            limpiar_buffer_linea();
+            opcion_principal = 0;
+        } else {
+            limpiar_buffer_linea();
         }
 
-        switch (opcion_principal) {
+        switch (opcion_principal){
             case 1: {
-
                 mostrar_plantilla(mi_club);
                 printf("\n¿Deseas intercambiar titular por banca? (1 = Si, 0 = No): ");
                 int resp = 0;
 
-            if (scanf("%d", &resp) != 1) {
-                limpiar_buffer_linea();
-                resp = 0;
-            } else {
-                limpiar_buffer_linea();
-            }
+                if (scanf("%d", &resp) != 1){
+                    limpiar_buffer_linea();
+                    resp = 0;
+                } else {
+                    limpiar_buffer_linea();
+                }
 
-            if (resp == 1) {
-                intercambiar_titular_banca(mi_club);
-            } else {
-                enter_continuar();
-            }
+                if (resp == 1) {
+                    intercambiar_titular_banca(mi_club);
+                } else {
+                    enter_continuar();
+                }
                 break;
+            }
 
             case 2:
-                mercado(mi_club);
+                if (total_pool >= 20) {
+                    mercado(mi_club, tienda, TAM_TIENDA_MENU);
+                } else {
+                    printf("\nNo hay suficientes jugadores cargados desde jugadores.txt para abrir el mercado.\n");
+                    enter_continuar();
+                }
                 break;
+
             case 3:
                 limpiar_pantalla();
                 printf("Avanzando al siguiente dia...\n");
                 enter_continuar();
+
                 if (mi_club->dia_actual < 7) {
                     eventos_ejecutar(mi_club);
+                    mi_club->dia_actual++;
+                    mi_club->presupuesto += 700000;
+                    if (total_pool >= 20) {
+                        variar_precios(pool, total_pool);
+                        seleccionar_jugadores(pool, total_pool, tienda);
+                    }
+                    enter_continuar();
                 } else {
                     eventos_final(mi_club);
+                    mi_club->dia_actual++;
+                    enter_continuar();
                 }
-                enter_continuar();
-                mi_club->dia_actual++;
-                mi_club->presupuesto += 700000;
-                // seleccionar_jugadores(...);
-                // variar_precios(...);
                 break;
+
             case 4:
                 guardar_partida(mi_club);
                 enter_continuar();
                 limpiar_pantalla();
                 break;
+
             case 5:
                 printf("Regresando al menu principal...\n");
                 enter_continuar();
                 break;
+
             default:
                 printf("Opcion invalida. Por favor, elige una opcion valida.\n");
                 enter_continuar();
                 break;
-            }
         }
-
     } while (mi_club->dia_actual <= 7 && opcion_principal != 5);
 }
 
@@ -283,7 +335,7 @@ bool puede_vender(Club *mi_club){
     return true;
 }
 
-void intercambiar_titular_banca(Club *mi_club) {
+void intercambiar_titular_banca(Club *mi_club){
 
     mostrar_plantilla(mi_club);
 
@@ -343,4 +395,22 @@ void intercambiar_titular_banca(Club *mi_club) {
            mi_club->plantilla[idx_titular].nombre,
            mi_club->plantilla[idx_banca].nombre);
     enter_continuar();
+}
+
+void mostrar_tienda(Jugador tienda[], int total_tienda){
+    printf("\n============================================================\n");
+    printf("                     JUGADORES EN TIENDA                    \n");
+    printf("============================================================\n");
+    printf("%-4s %-28s %-5s %-5s %-12s\n", "#", "Nombre", "Pos", "Med", "Valor");
+    printf("------------------------------------------------------------\n");
+
+    for (int i = 0; i < total_tienda; i++) {
+        if (tienda[i].nombre[0] == '\0' || tienda[i].valor <= 0) {
+            printf("%-4d %-28s %-5s %-5s %-12s\n", i + 1, "FICHADO / NO DISPONIBLE", "-", "-", "-");
+        } else {
+            printf("%-4d %-28s %-5s %-5d $%-11d\n",
+                   i + 1, tienda[i].nombre, tienda[i].posicion, tienda[i].media, tienda[i].valor);
+        }
+    }
+    printf("------------------------------------------------------------\n");
 }
