@@ -66,7 +66,7 @@ void mostrar_menu_principal(const char* nombre_club, int dia_actual, int presupu
     printf(" [2] Mercado de fichajes (Comprar/Vender)\n"); // <--- Aquí
     printf(" [3] Avanzar al siguiente dia\n");
     printf(" [4] Guardar partida\n");
-    printf(" [6] Salir al menu principal\n");
+    printf(" [5] Salir al menu principal\n");
     printf("----------------------------------------\n");
     printf("Elige una opcion: ");
 }
@@ -74,13 +74,13 @@ void mostrar_menu_principal(const char* nombre_club, int dia_actual, int presupu
 void mostrar_creditos(){
         limpiar_pantalla();
         printf("=========================================\n");
-        printf("                Creditos                 \n");
+        printf("                Créditos                 \n");
         printf("=========================================\n");
         printf("Equipo \n");
-        printf("Alejandro Guardiola Rodriguez________\n");
-        printf("Bryan Armando Cano Guzman____________\n");
+        printf("Alejandro Guardiola Rodríguez________\n");
+        printf("Bryan Armando Cano Guzmán____________\n");
         printf("Ian Emmanuel Valle Reza______________\n");
-        printf("Miranda Mariel Vidales Gutierrez_____\n");
+        printf("Miranda Mariel Vidales Gutiérrez_____\n");
 
 }
 
@@ -116,6 +116,49 @@ void inicializar_club(Club *mi_club) {
     
 }
 
+void mercado(Club *mi_club) {
+    int opcion_mercado;
+    char jugador_vender[50];
+
+    do{
+    limpiar_pantalla();
+    printf("========================================\n");
+    printf("         MERCADO DE FICHAJES            \n");
+    printf("========================================\n");
+    printf("[1] Comprar jugador\n");
+    printf("[2] Vender jugador\n");
+    printf("[3] Regresar al menu principal\n");
+    printf("----------------------------------------\n");
+    printf("Elige una opcion: ");
+    int opcion_mercado;
+    scanf("%d", &opcion_mercado);
+
+    switch(opcion_mercado) {
+        case 1:
+            limpiar_pantalla();
+            printf(".\n");
+            break;
+        case 2:
+            limpiar_pantalla();
+            mostrar_plantilla(mi_club);
+            printf("Ingrese el nombre del jugador que desea vender: ");
+            scanf(" %[^\n]", jugador_vender);
+            //vender()
+            break;
+        case 3:
+            limpiar_pantalla();
+            printf("Regresando al menu principal...\n");
+            enter_continuar();
+            break;
+        default:
+            limpiar_pantalla();
+            printf("Opcion invalida. Por favor, elige una opcion valida.\n");
+            enter_continuar();
+            break;
+    }
+    
+    }while(opcion_mercado != 3);
+}
 void partida(Club *mi_club) {
 
     int opcion_principal;
@@ -130,8 +173,7 @@ void partida(Club *mi_club) {
                 enter_continuar();
                 break;
             case 2:
-                //mercado();
-                printf("No implementado aún.\n");
+                mercado(mi_club);
                 enter_continuar();
                 break;
             case 3:
@@ -148,13 +190,15 @@ void partida(Club *mi_club) {
                 enter_continuar();
                 mi_club->dia_actual++;
                 mi_club->presupuesto += 700000; // Incrementar el presupuesto en $700,000 cada día
+                //seleccionar_jugadores(mi_club->plantilla, mi_club->total_jugadores, );
+                //variar_precios()
                 break;
             case 4:
                 guardar_partida(mi_club);
                 enter_continuar();
                 limpiar_pantalla();
                 break;
-            case 6:
+            case 5:
                 printf("Regresando al menu principal...\n");
                 enter_continuar();
                 break;
@@ -164,5 +208,6 @@ void partida(Club *mi_club) {
                 break;
         }
 
-    } while(mi_club->dia_actual <= 7 && opcion_principal != 6);
+    } while(mi_club->dia_actual <= 7 && opcion_principal != 5);
 }
+
