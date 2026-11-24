@@ -81,6 +81,7 @@ void variar_precios(Jugador jugador[], int total_jugadores) {
 }
 
 void seleccionar_jugadores(Jugador jugador[], int total_jugadores, Jugador tienda[]) {
+
     if (jugador == NULL || tienda == NULL || total_jugadores <= 0) return;
 
     int cont_por = 0;
@@ -130,4 +131,69 @@ void seleccionar_jugadores(Jugador jugador[], int total_jugadores, Jugador tiend
             }
         }
     }
+}
+
+bool comprar_jugador(Club *club, Jugador tienda[], int total_tienda, int idx_tienda) {
+    if (club == NULL || tienda == NULL || idx_tienda < 0 || idx_tienda >= total_tienda) {
+        return false;
+    }
+
+    Jugador fichaje = tienda[idx_tienda];
+    if (fichaje.nombre[0] == '\0' || fichaje.valor <= 0) {
+        printf("Ese jugador ya no esta disponible en la tienda.\n");
+        return false;
+    }
+
+    if (club->presupuesto < fichaje.valor) {
+        printf("Presupuesto insuficiente (%d < %d).\n", club->presupuesto, fichaje.valor);
+        return false;
+    }
+
+    if (agregar_jugador(club, fichaje.nombre, fichaje.posicion, fichaje.media, fichaje.valor) != 1) {
+        return false;
+    }
+
+    club->presupuesto -= fichaje.valor;
+    tienda[idx_tienda].valor = 0;
+    tienda[idx_tienda].nombre[0] = '\0';
+
+    printf("Fichaste a %s por %d.\n", fichaje.nombre, fichaje.valor);
+    return true;
+}
+
+bool vender_jugador(Club *club, int idx_plantilla){
+    if (club == NULL || club->plantilla == NULL){
+        return false;
+    }
+    if (club->total_jugadores <= 11){
+        printf("No puedes vender mas jugadores: debes mantener al menos 11 en la plantilla.\n");
+        return false;
+    }
+    if (idx_plantilla < 0 || idx_plantilla >= club->total_jugadores){
+        printf("Indice de jugador no valido.\n");
+        return false;
+    }
+
+    Jugador vendido = club->plantilla[idx_plantilla];
+    bool era_titular = vendido.titular;
+    int monto = vendido.valor;
+
+    if (eliminar_jugador(club, idx_plantilla) != 1){
+        return false;
+    }
+
+    club->presupuesto += monto;
+
+    if (era_titular && club->total_jugadores >= 11){
+        for (int i = 0; i < club->total_jugadores; i++){
+            if (!club->plantilla[i].titular) {
+                club->plantilla[i].titular = true;
+                printf("%s pasa de la banca a titular tras la venta.\n", club->plantilla[i].nombre);
+                break;
+            }
+        }
+    }
+
+    printf("Vendiste a %s por %d.\n", vendido.nombre, monto);
+    return true;
 }
