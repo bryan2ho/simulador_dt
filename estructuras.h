@@ -1,11 +1,13 @@
 #ifndef ESTRUCTURAS_H
 #define ESTRUCTURAS_H
+#include <stdbool.h>
 
 typedef struct {
     char nombre[50];
     char posicion[4];
     int media;
     int valor;
+    bool titular;
 } Jugador;
 
 typedef struct {

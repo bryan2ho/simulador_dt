@@ -45,6 +45,56 @@ Julian Quinones,DEL,83,950000
 Henry Martin,DEL,82,800000
 Rogelio Funes Mori,DEL,77,250000
 Tortugin,DEF,67,80000
-Jotaro Kujo,DEL,90,2100000;
+Jotaro Kujo,DEL,90,2100000
 Joseph Joestar,MED,72,200000
 Gilberto Mora,MED,77,180000
+Ederson Moraes,POR,88,1600000
+Gianluigi Donnarumma,POR,88,1550000
+Emiliano Martinez,POR,87,1300000
+Jan Oblak,POR,87,1250000
+Marc-Andre ter Stegen,POR,87,1200000
+Gregor Kobel,POR,86,1100000
+Diogo Costa,POR,85,950000
+Mike Maignan,POR,86,1050000
+Unai Simon,POR,84,780000
+David Raya,POR,84,820000
+Guglielmo Vicario,POR,82,620000
+Alex Remiro,POR,81,540000
+Lucas Chevalier,POR,81,580000
+Julio Gonzalez,POR,75,240000
+Antonio Rodriguez,POR,72,150000
+Ruben Dias,DEF,90,2300000
+William Saliba,DEF,89,2200000
+Virgil van Dijk,DEF,90,2100000
+Achraf Hakimi,DEF,87,1500000
+Theo Hernandez,DEF,87,1450000
+Josko Gvardiol,DEF,86,1350000
+Alessandro Bastoni,DEF,87,1400000
+Cristian Romero,DEF,85,980000
+Jeremie Frimpong,DEF,85,1020000
+Mats Hummels,DEF,81,480000
+Kevin Alvarez,DEF,76,290000
+Mateo Chavez,DEF,73,170000
+Rodrigo Huescas,DEF,78,360000
+Pedri Gonzalez,MED,88,1950000
+Martin Odegaard,MED,89,2150000
+Declan Rice,MED,87,1600000
+Jamal Musiala,MED,88,2050000
+Bukayo Saka,DEL,89,2250000
+Lamine Yamal,DEL,88,2300000
+Cole Palmer,MED,87,1750000
+Bruno Fernandes,MED,87,1500000
+Frenkie de Jong,MED,86,1300000
+Nico Williams,DEL,85,1150000
+Alexander Isak,DEL,86,1400000
+Lautaro Martinez,DEL,89,2000000
+Rafael Leao,DEL,86,1350000
+Khvicha Kvaratskhelia,DEL,86,1280000
+Antoine Griezmann,DEL,87,1100000
+Joselu Mato,DEL,78,270000
+Santiago Gimenez,DEL,83,880000
+Raul Jimenez,DEL,79,410000
+Cesar Huerta,DEL,78,370000
+Jonathan Dos Santos,MED,74,190000
+Miguel Layun,DEF,71,110000
+Exequiel Palacios,MED,82,740000

@@ -66,12 +66,27 @@ static void eventos_cambiar_estado(TipoEvento id, bool estado) {
 }
 
 static int calcular_promedio(Club *club) {
-    int suma = 0;
-    for (int i = 0; i < 11; i++) {
-        suma += club->plantilla[i].media;
+    if (club == NULL || club->plantilla == NULL || club->total_jugadores <= 0) {
+        return 0;
     }
-    
-    return suma / 11;
+
+    int suma = 0;
+    int titulares = 0;
+
+    for (int i = 0; i < club->total_jugadores; i++) {
+        if (club->plantilla[i].titular) {
+            suma += club->plantilla[i].media;
+            titulares++;
+        } else {
+            suma += 20;
+        }
+    }
+
+    if (titulares == 0) {
+        return 0;
+    }
+
+    return suma / titulares;
 }
 
 
@@ -101,10 +116,21 @@ void eventos_ejecutar(Club *club) {
             }
             printf("Media de %s: %d -> %d.\n", club->plantilla[r].nombre, club->plantilla[r].media + 5, club->plantilla[r].media);
             break;
-        case EVENTO_MUERTE:
+        case EVENTO_MUERTE:{
             r = rand() % club->total_jugadores;
-            printf("%s se ha quitado de la plantilla.\n",  club->plantilla[r].nombre);
-            eliminar_jugador(club, r);
+            bool era_titular = club->plantilla[r].titular;
+            printf("%s se ha quitado de la plantilla.\n", club->plantilla[r].nombre);
+
+            if (eliminar_jugador(club, r) == 1 && era_titular && club->total_jugadores >= 11) {
+                for (int i = 0; i < club->total_jugadores; i++) {
+                    if (!club->plantilla[i].titular) {
+                        club->plantilla[i].titular = true;
+                        printf("%s pasa de la banca a titular.\n", club->plantilla[i].nombre);
+                        break;
+                    }
+                }
+            }
+        }
             break;
         case EVENTO_MOTIVACION:
             r = rand() % club->total_jugadores;
@@ -114,21 +140,51 @@ void eventos_ejecutar(Club *club) {
             }
             printf("Media de %s: %d -> %d.\n", club->plantilla[r].nombre, club->plantilla[r].media - 5, club->plantilla[r].media);
             break;
-        case EVENTO_MULTA:
-            r = rand() % (club->presupuesto/2 - club->presupuesto/6 + 1) + club->presupuesto/6;
+        case EVENTO_MULTA: {
+            int min_monto = club->presupuesto / 6;
+            int max_monto = club->presupuesto / 2;
+            if (min_monto < 1) {
+                min_monto = 1;
+            }
+            if (max_monto < min_monto) {
+                max_monto = min_monto;
+            }
+            r = min_monto + rand() % (max_monto - min_monto + 1);
             club->presupuesto -= r;
+            if (club->presupuesto < 0) {
+                club->presupuesto = 0;
+            }
             printf("Nuevo presupuesto: %d -> %d.\n", club->presupuesto + r, club->presupuesto);
             break;
-        case EVENTO_EXPORTACION:
-            r = rand() % (club->presupuesto - club->presupuesto/4 + 1) + club->presupuesto/6;
+        }
+        case EVENTO_EXPORTACION: {
+            int min_monto = club->presupuesto / 6;
+            int max_monto = club->presupuesto - (club->presupuesto / 4);
+            if (min_monto < 1) {
+                min_monto = 1;
+            }
+            if (max_monto < min_monto) {
+                max_monto = min_monto;
+            }
+            r = min_monto + rand() % (max_monto - min_monto + 1);
             club->presupuesto += r;
             printf("Nuevo presupuesto: %d -> %d.\n", club->presupuesto - r, club->presupuesto);
             break;
-        case EVENTO_VENTA_CAMISAS:
-            r = rand() % (club->presupuesto/2 - club->presupuesto/6 + 1) + club->presupuesto/6;
+        }
+        case EVENTO_VENTA_CAMISAS: {
+            int min_monto = club->presupuesto / 6;
+            int max_monto = club->presupuesto / 2;
+            if (min_monto < 1) {
+                min_monto = 1;
+            }
+            if (max_monto < min_monto) {
+                max_monto = min_monto;
+            }
+            r = min_monto + rand() % (max_monto - min_monto + 1);
             club->presupuesto += r;
             printf("Nuevo presupuesto: %d -> %d.\n", club->presupuesto - r, club->presupuesto);
             break;
+        }
         case EVENTO_BUENA_PRETEMPORADA:
             for (int i = 0; i < club->total_jugadores; i++) {
                 if (club->plantilla[i].media < 99) {
