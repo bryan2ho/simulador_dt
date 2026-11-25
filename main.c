@@ -9,6 +9,10 @@
 #include "sistema_mercado.h"
 #include "misc.h"
 #include "menu.h"
+#include <locale.h> //para poder incluir acentos y la ñ
+#ifdef _WIN32
+    #include <windows.h>
+#endif
 
 // gcc main.c menu.c misc.c sistema_mercado.c sistema_eventos.c sistema_guardado.c -o simulador_dt.exe
 
@@ -27,12 +31,19 @@ static void solicitar_nombre_club(Club *club) {
         club->nombre_equipo[strcspn(club->nombre_equipo, "\r\n")] = '\0';
     }
     if (club->nombre_equipo[0] == '\0') {
-        strcpy(club->nombre_equipo, "FC Nuevo Leon");
+        strcpy(club->nombre_equipo, "FC FM");
     }
     printf("=========================================\n");
 }
 
 int main(void) {
+
+    #ifdef _WIN32
+        SetConsoleOutputCP(CP_UTF8);
+        SetConsoleCP(CP_UTF8);
+    #endif
+    setlocale(LC_ALL, ".UTF-8");
+
     Club mi_club = {0};
     mi_club.dia_actual = 1;
     int opcion_inicial = 0;
