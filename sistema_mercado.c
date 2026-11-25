@@ -8,7 +8,6 @@
 #define MAX_JUGADORES_TXT 100
 
 static void limpiar_salto_linea(char *texto) {
-    if (texto == NULL) return;
     size_t len = strlen(texto);
     while (len > 0 && (texto[len - 1] == '\n' || texto[len - 1] == '\r')) {
         texto[len - 1] = '\0';
@@ -18,33 +17,21 @@ static void limpiar_salto_linea(char *texto) {
 
 int cargar_jugadores(Jugador jugador[]) {
     FILE *archivo_jugadores = fopen("jugadores.txt", "r");
-
     if (archivo_jugadores == NULL) {
         printf("Error: el archivo no se pudo abrir\n");
         return 0;
     }
 
     int total_jugadores = 0;
-    printf("Archivo abierto correctamente.\n");
     char linea[128];
 
     while (total_jugadores < MAX_JUGADORES_TXT && fgets(linea, sizeof(linea), archivo_jugadores) != NULL) {
         limpiar_salto_linea(linea);
-        if (linea[0] == '\0') {
-            continue;
-        }
 
         char *nombre = strtok(linea, ",");
         char *posicion = strtok(NULL, ",");
         char *media = strtok(NULL, ",");
         char *valor = strtok(NULL, ",");
-
-        if (nombre == NULL || posicion == NULL || media == NULL || valor == NULL) {
-            printf("Advertencia: línea con formato inválido omitida.\n");
-            continue;
-        }
-
-        limpiar_salto_linea(valor);
 
         strncpy(jugador[total_jugadores].nombre, nombre, sizeof(jugador[total_jugadores].nombre) - 1);
         jugador[total_jugadores].nombre[sizeof(jugador[total_jugadores].nombre) - 1] = '\0';
@@ -65,16 +52,12 @@ int cargar_jugadores(Jugador jugador[]) {
 }
 
 void variar_precios(Jugador jugador[], int total_jugadores) {
-    if (jugador == NULL || total_jugadores <= 0) return;
-
     for (int i = 0; i < total_jugadores; i++) {
-        int cambio = rand() % 2;
-        if (cambio == 1) {
-            int variacion = (rand() % 21) - 10; // Rango de -10% a +10%
-            long long ajuste = ((long long)jugador[i].valor * variacion) / 100LL;
-            long long nuevo_valor = (long long)jugador[i].valor + ajuste;
-            if (nuevo_valor < 1000LL) {
-                nuevo_valor = 1000LL;
+        if (rand() % 2 == 1) {
+            int variacion = (rand() % 21) - 10; // -10% a +10%
+            long nuevo_valor = (long)jugador[i].valor + ((long)jugador[i].valor * variacion) / 100L;
+            if (nuevo_valor < 1000L) {
+                nuevo_valor = 1000L;
             }
             jugador[i].valor = (int)nuevo_valor;
         }
@@ -82,32 +65,14 @@ void variar_precios(Jugador jugador[], int total_jugadores) {
 }
 
 void seleccionar_jugadores(Jugador jugador[], int total_jugadores, Jugador tienda[]) {
-
-    if (jugador == NULL || tienda == NULL || total_jugadores <= 0) return;
-
     int cont_por = 0;
     int cont_def = 0;
     int cont_med = 0;
     int cont_del = 0;
-
-    int disponibles_por = 0;
-    int disponibles_def = 0;
-    int disponibles_med = 0;
-    int disponibles_del = 0;
-
-    for (int i = 0; i < total_jugadores; i++) {
-        if (strcmp(jugador[i].posicion, "POR") == 0) disponibles_por++;
-        else if (strcmp(jugador[i].posicion, "DEF") == 0) disponibles_def++;
-        else if (strcmp(jugador[i].posicion, "MED") == 0) disponibles_med++;
-        else if (strcmp(jugador[i].posicion, "DEL") == 0) disponibles_del++;
-    }
-
-
-    int limite_pool = (total_jugadores > MAX_JUGADORES_TXT) ? MAX_JUGADORES_TXT : total_jugadores;
     int seleccionados[MAX_JUGADORES_TXT] = {0};
 
     while (cont_por < 5 || cont_def < 5 || cont_med < 5 || cont_del < 5) {
-        int indice = rand() % limite_pool;
+        int indice = rand() % total_jugadores;
         if (seleccionados[indice] == 0) {
             if (strcmp(jugador[indice].posicion, "POR") == 0 && cont_por < 5) {
                 seleccionados[indice] = 1;
@@ -135,12 +100,13 @@ void seleccionar_jugadores(Jugador jugador[], int total_jugadores, Jugador tiend
 }
 
 bool comprar_jugador(Club *club, Jugador tienda[], int total_tienda, int idx_tienda) {
-    if (club == NULL || tienda == NULL || idx_tienda < 0 || idx_tienda >= total_tienda) {
+    if (idx_tienda < 0 || idx_tienda >= total_tienda) {
+        printf("Numero de jugador fuera de rango.\n");
         return false;
     }
 
     Jugador fichaje = tienda[idx_tienda];
-    if (fichaje.nombre[0] == '\0' || fichaje.valor <= 0) {
+    if (fichaje.valor <= 0) {
         printf("Ese jugador ya no esta disponible en la tienda.\n");
         return false;
     }
@@ -156,21 +122,13 @@ bool comprar_jugador(Club *club, Jugador tienda[], int total_tienda, int idx_tie
 
     club->presupuesto -= fichaje.valor;
     tienda[idx_tienda].valor = 0;
-    tienda[idx_tienda].nombre[0] = '\0';
 
     printf("Fichaste a %s por %d.\n", fichaje.nombre, fichaje.valor);
     return true;
 }
 
-bool vender_jugador(Club *club, int idx_plantilla){
-    if (club == NULL || club->plantilla == NULL){
-        return false;
-    }
-    if (club->total_jugadores <= 11){
-        printf("No puedes vender mas jugadores: debes mantener al menos 11 en la plantilla.\n");
-        return false;
-    }
-    if (idx_plantilla < 0 || idx_plantilla >= club->total_jugadores){
+bool vender_jugador(Club *club, int idx_plantilla) {
+    if (idx_plantilla < 0 || idx_plantilla >= club->total_jugadores) {
         printf("Indice de jugador no valido.\n");
         return false;
     }
@@ -179,14 +137,14 @@ bool vender_jugador(Club *club, int idx_plantilla){
     bool era_titular = vendido.titular;
     int monto = vendido.valor;
 
-    if (eliminar_jugador(club, idx_plantilla) != 1){
+    if (eliminar_jugador(club, idx_plantilla) != 1) {
         return false;
     }
 
     club->presupuesto += monto;
 
-    if (era_titular && club->total_jugadores >= 11){
-        for (int i = 0; i < club->total_jugadores; i++){
+    if (era_titular && club->total_jugadores >= 11) {
+        for (int i = 0; i < club->total_jugadores; i++) {
             if (!club->plantilla[i].titular) {
                 club->plantilla[i].titular = true;
                 printf("%s pasa de la banca a titular tras la venta.\n", club->plantilla[i].nombre);
